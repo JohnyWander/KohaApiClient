@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 
-namespace ApiClient.Core.JsonDeserialization
+namespace AllcandoJM.KohaFramework.JsonDeserialization
 {
     public class Error
     {

@@ -5,7 +5,7 @@ using System.Text;
 using AllcandoJM.KohaFramework.JsonDeserialization;
 using AllcandoJM.KohaFramework.ApiCore.Helpers;
 using AllcandoJM.KohaFramework.ApiCore.Helpers.Exceptions;
-using ApiClient.Core.JsonDeserialization;
+using AllcandoJM.KohaFramework.ApiCore;
 
 namespace AllcandoJM.KohaFramework.ApiCore
 {
