@@ -16,7 +16,7 @@ namespace AllcandoJM.KohaFramework.ApiClientHolds
 
 
             var response = await client.SendAsync(request);
-            return await StreamTostring(response);
+            return await Handle(response); 
 
         }
 
@@ -24,7 +24,7 @@ namespace AllcandoJM.KohaFramework.ApiClientHolds
         {
             //var response = await client.GetAsync($"{this.BaseUrl}/api/v1/acquisitions/orders");       
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/holds");
-            return await StreamTostring(response);
+            return await Handle(response);
         }
         #endregion
     }

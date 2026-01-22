@@ -33,10 +33,9 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
 
 
             var response = await client.SendAsync(request);
+            ApiResponse res = await base.ParseResponseAsync(response);
 
-
-            return await StreamTostring(response);
-
+            return await Handle(response); ;
         }
 
 

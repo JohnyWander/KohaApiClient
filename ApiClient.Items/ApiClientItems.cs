@@ -2,6 +2,7 @@
 using AllcandoJM.KohaFramework.JsonDeserialization;
 using AllcandoJM.KohaFramework.ApiCore;
 using System.Text;
+using AllcandoJM.KohaFramework.ApiCore.Helpers.Exceptions;
 
 namespace AllcandoJM.KohaFramework.ApiClientItems
 {
@@ -59,36 +60,37 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
             request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
             var response = await client.SendAsync(request);
-            return await StreamTostring(response);
+            return await Handle(response); 
 
         }
 
 
+       
+
         public async Task<string> GetItemById(string itemID)
         {
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/items/{itemID}");
-            return await StreamTostring(response);
+            return await Handle(response);
         }
 
         public async Task<string> GetItemByBiblio(string bibnum)
         {
             var response = await client.GetAsync($"{this.BaseUrl}" + "/api/v1/items?q={\"biblio_id\":" + $"{bibnum}" + "}");
-            return await StreamTostring(response);
-
+            return await Handle(response);
         }
 
 
         public async Task<string> GetItemByCallNumber(string callNumber)
         {
             var response = await client.GetAsync($"{this.BaseUrl}" + "/api/v1/items?q={\"callnumber\":" + $"\"{callNumber}\"" + "}");
-            return await StreamTostring(response);
+            return await Handle(response);
         }
 
 
         public async Task<string> GetItemByBarcode(string barcode)
         {
             var response = await client.GetAsync($"{this.BaseUrl}" + "/api/v1/items?q={\"external_id\":" + $"\"{barcode}\"" + "}");
-            return await StreamTostring(response);  
+            return await Handle(response);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllcandoJM.KohaFramework.ApiCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,14 @@ namespace AllcandoJM.KohaFramework
             Stream s = await response.Content.ReadAsStreamAsync();
             int read = await s.ReadAsync(buffer, 0, (int)s.Length);
 
+            
             return Encoding.UTF8.GetString(buffer, 0, read);
+        }
+
+        public async Task<ApiResponse> ParseResponseAsync(HttpResponseMessage response)
+        {
+            ApiResponse resp= new ApiResponse();
+            return await resp.ParseApiResponseAsync(response);
         }
 
     }

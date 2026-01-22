@@ -20,21 +20,21 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
 
             var response = await client.SendAsync(request);
             Console.WriteLine(request.Headers.Authorization.ToString());
-            return await StreamTostring(response);
+            return await Handle(response);
         }
 
         public async Task<string> GetPatronById(string patron_id)
         {
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons?patron_id={patron_id}");
             //response.Content.J
-            return await StreamTostring(response);
+            return await Handle(response);
 
         }
 
         public async Task<string> GetPatronByCardnumber(string cardnumber)
         {
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons?cardnumber={cardnumber}");
-            return await StreamTostring(response);
+            return await Handle(response);
         }
 
 
@@ -51,7 +51,7 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
             PatronsRequest = PatronsRequest.Replace("@arg", arg.TrimEnd(',')); ;
 
             var response = await client.GetAsync($"{this.BaseUrl}{PatronsRequest}");
-            return await StreamTostring(response);
+            return await Handle(response);
 
 
         }

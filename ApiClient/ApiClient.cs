@@ -3,7 +3,9 @@ using AllcandoJM.KohaFramework.ApiCore.Interfaces;
 using System.Security;
 using System.Text;
 using AllcandoJM.KohaFramework.JsonDeserialization;
-
+using AllcandoJM.KohaFramework.ApiCore.Helpers;
+using AllcandoJM.KohaFramework.ApiCore.Helpers.Exceptions;
+using ApiClient.Core.JsonDeserialization;
 
 namespace AllcandoJM.KohaFramework.ApiCore
 {
@@ -27,7 +29,12 @@ namespace AllcandoJM.KohaFramework.ApiCore
 
 
         protected string BaseUrl;
+        public ExceptionHandler ExceptionHandler = new ExceptionHandler();
 
+        protected void FireExceptionEvent(Exception e)
+        {
+            this.ExceptionHandler.RaiseExceptionEvent(e);
+        }
      
         /// <summary>
         /// Creates api client and configures it with config file
@@ -99,6 +106,23 @@ namespace AllcandoJM.KohaFramework.ApiCore
         }
     }
 
+        protected async Task<string> Handle(HttpResponseMessage response)
+        {
+            ApiResponse resp = await base.ParseResponseAsync(response);
+            if (resp.IsSuccess)
+            {
+                return resp.ResponseRawJson;
+            }
+            else
+            {
+                string err = $"Failed - HttpCode: {(int)resp.ResponseCode}({resp.ResponseCode.ToString()}) {resp.ErrorCode},{resp.ErrorMessage}";
+                FireExceptionEvent(new ApiRequestException(err));
+
+                return $"{err}";
+            }
+
+        }
+
         private async Task<Token> GetToken(string id,string key)
         {
             var response = await client.PostAsync($"{BaseUrl}/api/v1/oauth/token", new FormUrlEncodedContent(new Dictionary<string,string>
@@ -107,10 +131,21 @@ namespace AllcandoJM.KohaFramework.ApiCore
                 { "client_id", id },
                 { "client_secret", key }
             }));
-            var json = await StreamTostring(response);
-            KohaJsonDeserializer deserializer = new KohaJsonDeserializer();
-            //Console.WriteLine(json);
-            return deserializer.DeserializeToken(json);         
+          
+            ApiResponse resp = await base.ParseResponseAsync(response);
+
+            if (resp.IsSuccess)
+            {
+                KohaJsonDeserializer deserializer = new KohaJsonDeserializer();
+                //Console.WriteLine(json);
+                return deserializer.DeserializeToken(resp.ResponseRawJson);
+            }
+            else
+            {
+                this.ExceptionHandler.RaiseExceptionEvent(
+                new ApiAuthException($"Could not get token with error - HttpStatusCode:{(int)resp.ResponseCode}, ErrCode:{resp.ErrorCode},Msg:{resp.ErrorMessage}"));
+                return null;
+            }
         }
       
         private void SetHTTPBasicHeader(string u,string p)

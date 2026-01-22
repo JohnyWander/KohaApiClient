@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Diagnostics;
 using AllcandoJM.KohaFramework.ApiCore;
+using ApiClient.Core.JsonDeserialization;
 
 namespace AllcandoJM.KohaFramework.JsonDeserialization
 {
@@ -32,9 +33,17 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
    
     }
 
-    public class KohaJsonDeserializer : IHoldDeserializer,IItemDeserializer,IPatronDeserializer, ITokenDeserializer
+    public interface IErrorDeserializer
     {
-        
+        public Error DeserializeError(string json);
+    }
+
+    public class KohaJsonDeserializer : IHoldDeserializer,IItemDeserializer,IPatronDeserializer, ITokenDeserializer,IErrorDeserializer
+    {
+        public Error DeserializeError(string json)
+        {
+            return JsonSerializer.Deserialize<Error>(json);
+        }
        
 
 
