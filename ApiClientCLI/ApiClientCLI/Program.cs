@@ -48,8 +48,6 @@ namespace AllcandoJM.KohaFramework.ApiClientCLI
 
         static async Task Main(string[] args)
         {
-          
-
 
             List<MethodInfo> methods = new List<MethodInfo>();
             methods.AddRange(BuildFunctionList(typeof(ApiClientBiblios.ApiClientBiblios)));
