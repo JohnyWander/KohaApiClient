@@ -5,6 +5,11 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
 {
     public class ApiClientBiblios : ApiCore.ApiClient
     {
+        public ApiClientBiblios() { }
+
+        public ApiClientBiblios(AuthMethod authMethod, string url, string username, string password) : base(authMethod, url, username, password) { }
+
+
         public enum BHeaders
         {
             ApplictionJson = 0,
@@ -24,7 +29,7 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
         };
 
 
-        public async Task<string> GetBiblio(string BiblioNumber, BHeaders format)
+        public async Task<string> GetBiblio(string BiblioNumber, BHeaders format )
         {
             string BiblioRequest = $"{this.BaseUrl}/api/v1/biblios/{BiblioNumber}";
 
@@ -34,8 +39,13 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
 
             var response = await client.SendAsync(request);
             ApiResponse res = await base.ParseResponseAsync(response);
-
+            
             return await Handle(response); ;
+        }
+
+        public async Task <string> GetBiblio(string BiblioNumber)
+        {
+            return await GetBiblio(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
         }
 
 

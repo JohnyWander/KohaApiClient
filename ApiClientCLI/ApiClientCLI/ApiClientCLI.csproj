@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ApiClient.Biblios\ApiClient.Biblios.csproj" />
+    <ProjectReference Include="..\..\ApiClient.Holds\ApiClient.Holds.csproj" />
+    <ProjectReference Include="..\..\ApiClient.Items\ApiClient.Items.csproj" />
+    <ProjectReference Include="..\..\ApiClient.Patrons\ApiClient.Patrons.csproj" />
+    <ProjectReference Include="..\..\ApiClient\ApiClient.Core.csproj" />
+    <ProjectReference Include="..\..\ConfigurationManager\ConfigurationManager.csproj" />
+  </ItemGroup>
+
+</Project>
