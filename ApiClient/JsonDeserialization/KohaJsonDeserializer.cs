@@ -40,6 +40,28 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
 
     public class KohaJsonDeserializer : IHoldDeserializer,IItemDeserializer,IPatronDeserializer, ITokenDeserializer,IErrorDeserializer
     {
+        /// <summary>
+        /// You can create custom class for deserialization, for example when you need only patron_id or exlude sensitive data you can pass object that will contain only this value
+        /// </summary>
+        /// <typeparam name="T">Custom class for deserialization</typeparam>
+        /// <param name="json">json list of records (json with [records..])</param>
+        /// <returns>List of deserialized records in provided class</returns>
+        public List<T> DeserializeCustomList<T>(string json)
+        {
+            return JsonSerializer.Deserialize<List<T>>(json);
+        }
+
+        /// <summary>
+        /// You can create custom class for deserialization, for example when you need only patron_id or exlude sensitive data, you can pass object that will contain only this value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public T DeserializeCustomRecord<T>(string json)
+        {
+            return JsonSerializer.Deserialize<T>(json);
+        }
+
         public Error DeserializeError(string json)
         {
             return JsonSerializer.Deserialize<Error>(json);
