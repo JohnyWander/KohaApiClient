@@ -3,6 +3,7 @@ using AllcandoJM.KohaFramework.JsonDeserialization;
 using AllcandoJM.KohaFramework.ApiCore;
 using System.Text;
 using AllcandoJM.KohaFramework.ApiCore.Helpers.Exceptions;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllcandoJM.KohaFramework.ApiClientItems
 {
@@ -36,6 +37,13 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         }
 
 
+        public ApiClientItems(ApiClient client) : base(client)
+        {
+
+        }
+
+
+
         IItemQuery Queries()
         {
             return this;
@@ -64,7 +72,7 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
 
         }
 
-
+ 
        
 
         public async Task<string> GetItemById(string itemID)
@@ -91,7 +99,11 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         {
             var response = await client.GetAsync($"{this.BaseUrl}" + "/api/v1/items?q={\"external_id\":" + $"\"{barcode}\"" + "}");
             return await Handle(response);
+
         }
+
+        
+
 
     }
 }

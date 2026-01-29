@@ -15,6 +15,7 @@ namespace AllcandoJM.KohaFramework.ApiCore
         ApiKey
     }
 
+
     public class ApiClient : ApiClientBase
     {
 
@@ -106,6 +107,18 @@ namespace AllcandoJM.KohaFramework.ApiCore
         }
     }
 
+        /// <summary>
+        /// Creates api client with same Http context as other api client
+        /// </summary>
+        /// <param name="client"></param>
+        public ApiClient(ApiClient client)
+        {
+            this.BaseUrl = client.BaseUrl;
+            this.client = client.client;
+            this.authMethod = client.authMethod;
+        }
+
+
         protected async Task<string> Handle(HttpResponseMessage response)
         {
             ApiResponse resp = await base.ParseResponseAsync(response);
@@ -115,7 +128,7 @@ namespace AllcandoJM.KohaFramework.ApiCore
             }
             else
             {
-                string err = $"Failed - HttpCode: {(int)resp.ResponseCode}({resp.ResponseCode.ToString()}) {resp.ErrorCode},{resp.ErrorMessage}";
+                string err = $"Failed - HttpCode: {(int)resp.ResponseCode}({resp.ResponseCode.ToString()}) {resp.ErrorCode},{resp.ErrorMessage} when trying - {response.RequestMessage.RequestUri}";
                 FireExceptionEvent(new ApiRequestException(err));
 
                 return $"{err}";

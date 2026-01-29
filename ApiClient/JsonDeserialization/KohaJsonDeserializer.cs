@@ -24,7 +24,7 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
 
     public interface IPatronDeserializer
     {
-        public List<Patron> DeserializePatronString(string json);
+        public List<PatronSafe> DeserializePatronSafeString(string json);
     }
 
     public interface ITokenDeserializer
@@ -70,12 +70,20 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         }
 
 
-        public List<Patron> DeserializePatronString(string json)
+        public List<PatronSafe> DeserializePatronSafeString(string json)
         {
-            return JsonSerializer.Deserialize<List<Patron>>(json);
+            return JsonSerializer.Deserialize<List<PatronSafe>>(json);
         }
 
+        public List<PatronFull> DeserializePatronFullString(string json)
+        {
+            return JsonSerializer.Deserialize<List<PatronFull>>(json);
+        }
 
+        public List<PatronDebits> DeserializePatronDebitsString(string json)
+        {
+            return JsonSerializer.Deserialize<List<PatronDebits>>(json);
+        }
 
     }
 }

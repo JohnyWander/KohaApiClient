@@ -9,6 +9,8 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
 
         public ApiClientBiblios(AuthMethod authMethod, string url, string username, string password) : base(authMethod, url, username, password) { }
 
+        public ApiClientBiblios(ApiClient client) : base(client) { }
+
 
         public enum BHeaders
         {

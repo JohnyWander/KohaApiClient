@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -26,7 +27,9 @@ namespace AllcandoJM.KohaFramework.ApiCore
         public async Task<ApiResponse> ParseApiResponseAsync(HttpResponseMessage response)
         {
             ResponseCode = response.StatusCode;
+            response.Content.Headers.ContentType.CharSet = "utf-8";
             ResponseRawJson = await  response.Content.ReadAsStringAsync();
+        
             
             if((int)ResponseCode>=200 && (int)ResponseCode<=206)
             {

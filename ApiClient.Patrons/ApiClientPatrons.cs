@@ -11,6 +11,14 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
         public ApiClientPatrons() { }
 
 
+        public ApiClientPatrons(AuthMethod authMethod, string url, string username, string password) : base(authMethod, url, username, password)
+        {
+
+        }
+
+
+
+
         #region patrons
         public async Task<string> PostCheckLogin()
         {
@@ -56,6 +64,27 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
 
         }
 
+        public async Task<string> GetPatronWithOverduesByPatronID(string patron_ID)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{this.BaseUrl}/api/v1/patrons?patron_id={patron_ID}");
+            request.Headers.Add("x-koha-embed", "overdues+count");
+            var response = await client.SendAsync(request);
+            return await Handle(response);
+        }
+
+        public async Task<string> GetPatronWithOverduesByCardnumber(string cardnumber)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{this.BaseUrl}/api/v1/patrons?cardnumber={cardnumber}");
+            request.Headers.Add("x-koha-embed", "overdues+count");
+            var response = await client.SendAsync(request);
+            return await Handle(response);
+        }
+
+        public async Task<string> GetOverduesForPatron(string patron_id)
+        {
+            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons/{patron_id}/account/debits");
+            return await Handle(response);
+        }
         #endregion
 
 

@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace AllcandoJM.KohaFramework.JsonDeserialization
 {
-    public class Patron
+    public class PatronSafe
     {
         [JsonPropertyName("firstname")]
         public string Firstname { get; set; }
