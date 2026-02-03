@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -18,8 +19,6 @@ namespace AllcandoJM.KohaFramework.ApiCore
         public string ErrorMessage;
         public string ErrorCode;
 
-        
-
         public string ResponseRawJson;
 
         KohaJsonDeserializer deserializer = new KohaJsonDeserializer();
@@ -28,8 +27,7 @@ namespace AllcandoJM.KohaFramework.ApiCore
         {
             ResponseCode = response.StatusCode;
             response.Content.Headers.ContentType.CharSet = "utf-8";
-            ResponseRawJson = await  response.Content.ReadAsStringAsync();
-        
+            ResponseRawJson = await  response.Content.ReadAsStringAsync();       
             
             if((int)ResponseCode>=200 && (int)ResponseCode<=206)
             {
@@ -45,6 +43,23 @@ namespace AllcandoJM.KohaFramework.ApiCore
 
             return this;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public T DeserializeResponseAsRecord<T>()
+        {       
+            return deserializer.DeserializeCustomRecord<T>(ResponseRawJson);
+        }
+
+        public List<T> DeserializeResponseAsList<T>()
+        {
+            return deserializer.DeserializeCustomList<T>(ResponseRawJson);
+        }
+
+
 
 
 

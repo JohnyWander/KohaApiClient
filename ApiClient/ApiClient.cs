@@ -119,7 +119,7 @@ namespace AllcandoJM.KohaFramework.ApiCore
         }
 
 
-        protected async Task<string> Handle(HttpResponseMessage response)
+        protected async Task<string> HandleString(HttpResponseMessage response)
         {
             ApiResponse resp = await base.ParseResponseAsync(response);
             if (resp.IsSuccess)
@@ -135,6 +135,13 @@ namespace AllcandoJM.KohaFramework.ApiCore
             }
 
         }
+
+        public async Task<ApiResponse> HandleResponse(HttpResponseMessage response)
+        {
+            return await base.ParseResponseAsync(response);
+        }
+
+
 
         private async Task<Token> GetToken(string id,string key)
         {

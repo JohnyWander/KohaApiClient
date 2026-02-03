@@ -30,25 +30,42 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
             {(int)BHeaders.TextPlain,"text/plain" }
         };
 
-
-        public async Task<string> GetBiblio(string BiblioNumber, BHeaders format )
+        private async Task<HttpResponseMessage> SendBiblioRequest(string BiblioNumber,BHeaders format)
         {
             string BiblioRequest = $"{this.BaseUrl}/api/v1/biblios/{BiblioNumber}";
 
             var request = new HttpRequestMessage(HttpMethod.Get, BiblioRequest);
             request.Headers.Add("Accept", this.BibliosHeaders[(int)format]);
 
-
             var response = await client.SendAsync(request);
-            ApiResponse res = await base.ParseResponseAsync(response);
-            
-            return await Handle(response); ;
+            return response;
         }
 
-        public async Task <string> GetBiblio(string BiblioNumber)
+
+        public async Task<ApiResponse> GetBiblioAsync(string BiblioNumber, BHeaders format)
         {
-            return await GetBiblio(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
+            HttpResponseMessage resp = await SendBiblioRequest(BiblioNumber, format);
+            return await HandleResponse(resp);
         }
+
+        public async Task<ApiResponse> GetBiblioAsync(string BiblioNumber)
+        {
+            return await GetBiblioAsync(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
+        }
+
+
+        public async Task<string> GetBiblioStringAsync(string BiblioNumber, BHeaders format )
+        {        
+            return await HandleString(await SendBiblioRequest(BiblioNumber,format)); ;
+        }
+
+        public async Task <string> GetBiblioStringAsync(string BiblioNumber)
+        {
+            return await GetBiblioStringAsync(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
+        }
+
+        
+
 
 
     }

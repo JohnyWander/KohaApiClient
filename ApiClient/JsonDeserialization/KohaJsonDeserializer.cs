@@ -54,8 +54,8 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         /// <summary>
         /// You can create custom class for deserialization, for example when you need only patron_id or exlude sensitive data, you can pass object that will contain only this value
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="json"></param>
+        /// <typeparam name="T">Custom class for deserialization</typeparam>
+        /// <param name="json">single record response in json</param>
         /// <returns></returns>
         public T DeserializeCustomRecord<T>(string json)
         {

@@ -16,16 +16,24 @@ namespace AllcandoJM.KohaFramework.ApiClientHolds
 
 
             var response = await client.SendAsync(request);
-            return await Handle(response); 
+            return await HandleString(response); 
 
         }
 
-        public async Task<string> GetWaitingList()
+        public async Task<string> GetWaitingListStringAsync()
         {
             //var response = await client.GetAsync($"{this.BaseUrl}/api/v1/acquisitions/orders");       
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/holds");
-            return await Handle(response);
+            return await HandleString(response);
         }
+
+        public async Task<ApiResponse> GetWaitingListResponse()
+        {
+            return await HandleResponse(await client.GetAsync($"{this.BaseUrl}/api/v1/holds"));
+        }
+
+
+
         #endregion
     }
 }
