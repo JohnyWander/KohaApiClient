@@ -41,22 +41,53 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
             return response;
         }
 
+
+        /// <summary>
+        /// Updates item with provided json args
+        /// </summary>
+        /// <param name="ItemId">Item ID</param>
+        /// <param name="biblioId">Biblio ID</param>
+        /// <param name="args">array of JsonArg objects (name,value,valueType) to change item data</param>
+        /// <returns>response as json string</returns>
         public async Task<string> UpdateItemAsync(string ItemId, string biblioId, JsonArg[] args)
         {     
             return await HandleString(await SendUpdateRequest(ItemId,biblioId,args)); 
         }
+
+        /// <summary>
+        /// Updates item with provided json args
+        /// </summary>
+        /// <param name="ItemId">Item ID</param>
+        /// <param name="biblioId">Biblio ID</param>
+        /// <param name="args">array of JsonArg objects (name,value,valueType) to change item data</param>
+        /// <returns>ApiResponse object with related response info and deserialization methods</returns>
 
         public async Task<ApiResponse> UpdateItemWResponseAsync(string ItemId,string biblioId, JsonArg[] args)
         {
             return await HandleResponse(await  SendUpdateRequest(ItemId, biblioId,args));
         }
 
+
+
+
+
+
+        /// <summary>
+        /// calls /items/
+        /// </summary>
+        /// <param name="itemID">id of item</param>
+        /// <returns>item data as json string</returns>
         public async Task<string> GetItemStringByIdAsync(string itemID)
         {
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/items/{itemID}");
             return await HandleString(response);
         }
 
+        /// <summary>
+        /// calls /items/
+        /// </summary>
+        /// <param name="itemID">id of item</param>
+        /// <returns>ApiResponse object with related response info and deserialization methods</returns>
         public async Task<ApiResponse> GetItemResponseByIdAsync(string itemID)
         {
             var response = await client.GetAsync($"{this.BaseUrl}/api/v1/items/{itemID}");

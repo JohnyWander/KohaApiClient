@@ -41,24 +41,45 @@ namespace AllcandoJM.KohaFramework.ApiClientBiblios
             return response;
         }
 
-
-        public async Task<ApiResponse> GetBiblioAsync(string BiblioNumber, BHeaders format)
+        /// <summary>
+        /// Gets bibliographic record
+        /// </summary>
+        /// <param name="BiblioNumber">Biblionumber</param>
+        /// <param name="format">format of biblio marcxml for example</param>
+        /// <returns>ApiResponse object with related response info and deserialization methods</returns>
+        public async Task<ApiResponse> GetBiblioResponseAsync(string BiblioNumber, BHeaders format)
         {
             HttpResponseMessage resp = await SendBiblioRequest(BiblioNumber, format);
             return await HandleResponse(resp);
         }
 
-        public async Task<ApiResponse> GetBiblioAsync(string BiblioNumber)
+        /// <summary>
+        /// Gets bibliographic record in marcxml format
+        /// </summary>
+        /// <param name="BiblioNumber">Biblio number</param>
+        /// <returns>ApiResponse object with related response info and deserialization methods</returns>
+        public async Task<ApiResponse> GetBiblioResponseAsync(string BiblioNumber)
         {
-            return await GetBiblioAsync(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
+            return await GetBiblioResponseAsync(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
         }
 
 
+        /// <summary>
+        /// Gets bibliographic record as string
+        /// </summary>
+        /// <param name="BiblioNumber">Biblio number</param>
+        /// <param name="format">format of biblio marcxml for example</param>
+        /// <returns>String of bibliographic record in specified format</returns>
         public async Task<string> GetBiblioStringAsync(string BiblioNumber, BHeaders format )
         {        
             return await HandleString(await SendBiblioRequest(BiblioNumber,format)); ;
         }
 
+        /// <summary>
+        /// Gets bibliographic record as marcxml string
+        /// </summary>
+        /// <param name="BiblioNumber">Biblio number</param>
+        /// <returns>bibliographic record as marcxml string</returns>
         public async Task <string> GetBiblioStringAsync(string BiblioNumber)
         {
             return await GetBiblioStringAsync(BiblioNumber, BHeaders.ApplicationMarcxmlpluxxml);
