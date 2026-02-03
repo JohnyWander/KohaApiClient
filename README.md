@@ -13,6 +13,11 @@ Usage:
 
   <img width="987" height="220" alt="image" src="https://github.com/user-attachments/assets/226ba719-d0db-4210-9256-6fead00183fb" />
 
+<img width="1254" height="252" alt="image" src="https://github.com/user-attachments/assets/3d55fcc7-9524-48ca-ab31-6830eaf2e97c" />
+
+<img width="1095" height="558" alt="image" src="https://github.com/user-attachments/assets/85938ee2-eff2-4748-86d4-57a74fd0ec04" />
+
+
 You can also use cli version - (it can be compiled for linux too) - 
 
 ApiClientCLI.exe -t GetBiblio -u https://yourkoha.com -l <client id/username> -p <password/client secret> -a oauth -q 12 -o test.txt
