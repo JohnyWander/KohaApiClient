@@ -1,4 +1,5 @@
-﻿using AllcandoJM.KohaFramework.ConfigurationManager;
+﻿using AllcandoJM.KohaFramework.ApiCore;
+using AllcandoJM.KohaFramework.ConfigurationManager;
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AllcandoJM.KohaFramework
 {
-    public  class ReportsClient : ApiClientBase
+    public  class ReportsClient : ApiClient
     {
         HttpClient client;
         ApiConfig config;
@@ -27,7 +28,7 @@ namespace AllcandoJM.KohaFramework
             string p = config.GetConfigValue("KOHA STAFF PASSWORD");
 
             string cookie = CookieGrabber(BaseUrl,u,p).GetAwaiter().GetResult(); 
-           // client.DefaultRequestHeaders.Add("Cookie")
+           
 
 
         }
@@ -83,7 +84,34 @@ namespace AllcandoJM.KohaFramework
 
         }
 
+        public async Task<string> GetPrivateReport(string reportID)
+        {
+            string req = $"{BaseUrl}/cgi-bin/koha/svc/report?id={reportID}&op=run&limit=1000";
+            var respone = await client.GetAsync(req);
+            return await StreamTostring(respone);
+        }
 
+        
+        public async Task<string> GetPrivateReportCsvAsync(string reportID,string reportname="report")
+        {
+            string req = $"{BaseUrl}/cgi-bin/koha/reports/guided_reports.pl?op=export&format=csv&id={reportID}&reportname=borr_w_overdues";
+            var response = await client.GetAsync(req);
+            var csv = await response.Content.ReadAsStringAsync();
+            return csv;
+        }
+
+        public async Task<string> GetPrivateReportCsvAsync(string reportID, KeyValuePair<string, string>[] args,string reportname="report")
+        {
+
+            string req = $"{BaseUrl}/cgi-bin/koha/reports/guided_reports.pl?op=export&format=csv&id={reportID}&reportname={reportname}";
+            foreach (var arg in args)
+            {
+                req += $"&param_name={arg.Key}&sql_params={arg.Value}";
+            }
+            var response = await client.GetAsync(req);
+            var csv = await response.Content.ReadAsStringAsync();
+            return csv;
+        }
 
     }
 }

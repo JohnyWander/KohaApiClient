@@ -6,6 +6,7 @@ using AllcandoJM.KohaFramework.JsonDeserialization;
 using AllcandoJM.KohaFramework.ApiCore.Helpers;
 using AllcandoJM.KohaFramework.ApiCore.Helpers.Exceptions;
 using AllcandoJM.KohaFramework.ApiCore;
+using System.Diagnostics;
 
 namespace AllcandoJM.KohaFramework.ApiCore
 {
@@ -49,16 +50,22 @@ namespace AllcandoJM.KohaFramework.ApiCore
 
             BaseUrl = config.GetConfigValue("KOHA URL");
             string method = config.GetConfigValue("API AUTH");
+            
 
-            if(method == "HTTP_BASIC")
+            if (method == "HTTP_BASIC")
             {
                 authMethod = AuthMethod.Basic;
             }
-            else if(method == "oauth2")
+            else if (method == "oauth2")
             {
                 authMethod = AuthMethod.ApiKey;
             }
+            else
+            {
+                throw new ArgumentException("No such auth method");
+            }
 
+            
             switch (authMethod)
             {
                 case AuthMethod.Basic:

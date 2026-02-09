@@ -10,7 +10,7 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
  
     public class ApiClientItems : ApiCore.ApiClient
     {
-        public ApiClientItems()
+        public ApiClientItems() :base()
         {
 
         }
@@ -131,9 +131,14 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         {
             var response = await client.GetAsync($"{this.BaseUrl}" + "/api/v1/items?q={\"external_id\":" + $"\"{barcode}\"" + "}");
             return await HandleResponse(response);
-
         }
 
+
+        public async Task<ApiResponse> GetCheckoutResponseAsync(string checkout_id)
+        {
+            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/checkouts/{checkout_id}");
+            return await HandleResponse(response);
+        }
 
 
     }

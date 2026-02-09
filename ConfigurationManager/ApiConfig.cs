@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,9 @@ KOHA STAFF PASSWORD=
                 WriteDefaulConfig();
             }
 
+            FileInfo f = new FileInfo(ApiConfigFname);
+            
+
             List<string> configLines = File.ReadAllLines(ApiConfigFname).ToList();
 
 
@@ -117,7 +121,7 @@ KOHA STAFF PASSWORD=
                 {
                     string[] split = c.Split('=');
 
-                    ConfigValues.Where(x => x.Key == split[0]).First().Value = split[1];
+                    ConfigValues.Where(x => x.Key == split[0]).First().Value = split[1].Trim();
                 }
 
             });
