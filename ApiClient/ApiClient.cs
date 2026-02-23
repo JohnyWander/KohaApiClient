@@ -47,7 +47,7 @@ namespace AllcandoJM.KohaFramework.ApiCore
             client = new HttpClient();
             //Patron = this;
 
-
+            
             BaseUrl = config.GetConfigValue("KOHA URL");
             string method = config.GetConfigValue("API AUTH");
             
@@ -126,6 +126,19 @@ namespace AllcandoJM.KohaFramework.ApiCore
         }
 
 
+        public ApiClient(string url,string AuthHeader)
+        {
+            this.client = new HttpClient();
+            this.BaseUrl = url;
+            client.DefaultRequestHeaders.Authorization =
+           new System.Net.Http.Headers.AuthenticationHeaderValue(
+               "Basic", AuthHeader.Split(" ")[1]);
+
+        }
+
+
+
+
         protected async Task<string> HandleString(HttpResponseMessage response)
         {
             ApiResponse resp = await base.ParseResponseAsync(response);
@@ -192,6 +205,17 @@ namespace AllcandoJM.KohaFramework.ApiCore
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue
                     (token.TokenType, token.AccessToken);
             }).Wait();
+        }
+
+
+        public void AddXkohaEmbedHeader(string value)
+        {
+            this.client.DefaultRequestHeaders.Add("x-koha-embed", value);
+        }
+
+        public void ClearXkohaEmbedHeader()
+        {
+            this.client.DefaultRequestHeaders.Remove("x-koha-embed");
         }
 
     }

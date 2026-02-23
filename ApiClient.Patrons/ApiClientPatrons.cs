@@ -2,6 +2,7 @@
 using AllcandoJM.KohaFramework.ApiCore;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 
 namespace AllcandoJM.KohaFramework.ApiClientPatrons
 {
@@ -17,7 +18,10 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
 
         }
 
+        public ApiClientPatrons(string url,string authHeader) : base (url, authHeader)
+        {
 
+        }
 
 
         #region patrons
@@ -25,7 +29,15 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
         private async Task<HttpResponseMessage> ValidatePatronPasswordAsync(string identifier,string password)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{base.BaseUrl}/api/v1/auth/password/validation");
-            string jsonData = "{ \"identifier\": \""+identifier+"\", \"password\": \""+password+"\" }";
+            //string jsonData = "{ \"identifier\": \""+identifier+"\", \"password\": \""+password+"\" }"; // unsafe - \ breaks json
+
+            var payload = new
+            {
+                identifier = identifier,
+                password = password
+            };
+
+            string jsonData = JsonSerializer.Serialize(payload);
             request.Content = new StringContent(jsonData, Encoding.UTF8);
 
             var response = await client.SendAsync(request);
