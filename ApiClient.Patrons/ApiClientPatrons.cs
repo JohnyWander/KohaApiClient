@@ -3,6 +3,7 @@ using AllcandoJM.KohaFramework.ApiCore;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using System.Text.Encodings.Web;
 
 namespace AllcandoJM.KohaFramework.ApiClientPatrons
 {
@@ -218,9 +219,10 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
         /// </summary>
         /// <param name="patron_id">ID of patron</param>
         /// <returns>patron debits as json string</returns>
-        public async Task<string> GetOverduesStringForPatronAsync(string patron_id)
+        public async Task<string> GetOverduesStringForPatronAsync(string patron_id,string q= null)
         {
-            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons/{patron_id}/account/debits");
+            string param = q != null ? $"?q={base.UrlEncode(q)}" : "";
+            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons/{patron_id}/account/debits{param}");
             return await HandleString(response);
         }
 
@@ -230,9 +232,10 @@ namespace AllcandoJM.KohaFramework.ApiClientPatrons
         /// </summary>
         /// <param name="patron_id">ID of patron</param>
         /// <returns>ApiResponse object with related response info and deserialization methods</returns>
-        public async Task<ApiResponse> GetOverduesResponseForPatronAsync(string patron_id)
+        public async Task<ApiResponse> GetOverduesResponseForPatronAsync(string patron_id,string q = null)
         {
-            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons/{patron_id}/account/debits");
+            string param = q != null ? $"?q={base.UrlEncode(q)}" : "";
+            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/patrons/{patron_id}/account/debits{param}");
             return await HandleResponse(response);
         }
         #endregion

@@ -16,7 +16,7 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         public int PatronId { get; set; }
 
         [JsonPropertyName("item_id")]
-        public int ItemId { get; set; }
+        public int? ItemId { get; set; }
 
         [JsonPropertyName("booking_id")]
         public int BookingId { get; set; }
@@ -78,7 +78,8 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         public Dictionary<string, object>? Issuer { get; set; }
 
         [JsonPropertyName("item")]
-        public Dictionary<string, object>? Item { get; set; }
+        //public Dictionary<string, object>? Item { get; set; }
+        public ItemWithNestedBiblio Item { get; set; }
 
         [JsonPropertyName("library")]
         public Dictionary<string, object>? Library { get; set; }
@@ -88,5 +89,8 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
 
         [JsonPropertyName("booking")]
         public Dictionary<string, object>? Booking { get; set; }
+
+       
+
     }
 }

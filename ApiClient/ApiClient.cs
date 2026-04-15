@@ -7,6 +7,7 @@ using AllcandoJM.KohaFramework.ApiCore.Helpers;
 using AllcandoJM.KohaFramework.ApiCore.Helpers.Exceptions;
 using AllcandoJM.KohaFramework.ApiCore;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
 
 namespace AllcandoJM.KohaFramework.ApiCore
 {
@@ -217,6 +218,18 @@ namespace AllcandoJM.KohaFramework.ApiCore
         {
             this.client.DefaultRequestHeaders.Remove("x-koha-embed");
         }
+
+
+        public async Task<HttpResponseMessage> SendRawAsync(HttpRequestMessage msg)
+        {
+            return await client.SendAsync(msg);
+        }
+
+        protected string UrlEncode(string value)
+        {
+            return UrlEncoder.Default.Encode(value);
+        }
+
 
     }
 }

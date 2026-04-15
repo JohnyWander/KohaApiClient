@@ -64,6 +64,7 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
 
         public Error DeserializeError(string json)
         {
+            Console.WriteLine(json);
             return JsonSerializer.Deserialize<Error>(json);
         }
        

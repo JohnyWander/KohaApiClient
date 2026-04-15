@@ -7,6 +7,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata;
 using static AllcandoJM.KohaFramework.ApiCore.KohaHeaders;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
+using System;
+using System.Reflection.Emit;
 
 namespace AllcandoJM.KohaFramework.ApiClientItems
 {
@@ -29,7 +32,17 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
 
         }
 
+        public async Task<ApiResponse> GetHoldsListResponse(string q="")
+        {
+            return await HandleResponse(await client.GetAsync($"{this.BaseUrl}/api/v1/holds?{q}"));
+        }
 
+        public async Task<string> GetHoldsListStringAsync(string q="")
+        {
+            //var response = await client.GetAsync($"{this.BaseUrl}/api/v1/acquisitions/orders");       
+            var response = await client.GetAsync($"{this.BaseUrl}/api/v1/holds?{q}");
+            return await HandleString(response);
+        }
         public IItemDeserializer GetDeserializer()
         {
             return new KohaJsonDeserializer();
@@ -189,8 +202,36 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         }
 
 
+        public async Task<string> GetItemsStringByIDAsync(string id)
+        {
+            var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"item_id\":" + $"{id}" + "}",
+            KohaHeaders.ItemsXkohaEmbedHeaders.None, null, null, null, null);
+            return await HandleString(response);
+        }
 
-        public async Task<string> GetItemStringByBiblioAsync(string bibnum,string _match=null,string _order_by=null,string _page=null,string _per_page =null)
+        public async Task<string> GetItemsStringByIDAsync(string id,ItemsXkohaEmbedHeaders headers)
+        {
+            var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"item_id\":" + $"{id}" + "}",
+            headers, null, null, null, null);
+            return await HandleString(response);
+        }
+
+        public async Task<ApiResponse> GetItemsResponseByIdAsync(string id)
+        {
+            var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"item_id\":" + $"{id}" + "}",
+            KohaHeaders.ItemsXkohaEmbedHeaders.None, null, null, null, null);
+            return await HandleResponse(response);
+        }
+
+        public async Task<ApiResponse> GetItemsResponseByIdAsync(string id,ItemsXkohaEmbedHeaders headers)
+        {
+            var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"item_id\":" + $"{id}" + "}",
+            headers, null, null, null, null);
+            return await HandleResponse(response);
+        }
+        
+
+        public async Task<string> GetItemsStringByBiblioAsync(string bibnum,string _match=null,string _order_by=null,string _page=null,string _per_page =null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"biblio_id\":" + $"{bibnum}" + "}",
                 KohaHeaders.ItemsXkohaEmbedHeaders.None,_match,_order_by,_page,_per_page);
@@ -198,21 +239,21 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         }
 
 
-        public async Task<string> GetItemStringByBiblioAsync(string bibnum, KohaHeaders.ItemsXkohaEmbedHeaders headers, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<string> GetItemsStringByBiblioAsync(string bibnum, KohaHeaders.ItemsXkohaEmbedHeaders headers, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"biblio_id\":" + $"{bibnum}" + "}",
                 headers, _match, _order_by, _page, _per_page);
             return await HandleString(response);
         }
 
-        public async Task<ApiResponse> GetItemResponseByBiblioAsync(string bibnum, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<ApiResponse> GetItemsResponseByBiblioAsync(string bibnum, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"biblio_id\":" + $"{bibnum}" + "}",
                KohaHeaders.ItemsXkohaEmbedHeaders.None,_match, _order_by, _page, _per_page);
             return await HandleResponse(response);
         }
 
-        public async Task<ApiResponse> GetItemResponseByBiblioAsync(string bibnum, KohaHeaders.ItemsXkohaEmbedHeaders headers, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<ApiResponse> GetItemsResponseByBiblioAsync(string bibnum, KohaHeaders.ItemsXkohaEmbedHeaders headers, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"biblio_id\":" + $"{bibnum}" + "}",
                headers, _match, _order_by, _page, _per_page);
@@ -221,14 +262,14 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
 
 
 
-        public async Task<string> GetItemStringByCallNumberAsync(string callNumber, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<string> GetItemsStringByCallNumberAsync(string callNumber, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"callnumber\":" + $"\"{callNumber}\"" + "}",
                 KohaHeaders.ItemsXkohaEmbedHeaders.None,_match, _order_by, _page, _per_page);
             return await HandleString(response);
         }
 
-        public async Task<ApiResponse> GetItemResponseByCallNumberAsync(string callNumber,KohaHeaders.ItemsXkohaEmbedHeaders headers, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<ApiResponse> GetItemsResponseByCallNumberAsync(string callNumber,KohaHeaders.ItemsXkohaEmbedHeaders headers, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"callnumber\":" + $"\"{callNumber}\"" + "}",
                 headers, _match, _order_by, _page, _per_page);
@@ -236,7 +277,7 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         }
 
 
-        public async Task<string> GetItemStringByBarcodeAsync(string barcode,string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<string> GetItemsStringByBarcodeAsync(string barcode,string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"external_id\":" + $"\"{barcode}\"" + "}"
                 ,KohaHeaders.ItemsXkohaEmbedHeaders.None, _match, _order_by, _page, _per_page);
@@ -244,7 +285,7 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
 
         }
 
-        public async Task<string> GetItemStringByBarcodeAsync(string barcode, KohaHeaders.ItemsXkohaEmbedHeaders header, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<string> GetItemsStringByBarcodeAsync(string barcode, KohaHeaders.ItemsXkohaEmbedHeaders header, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"external_id\":" + $"\"{barcode}\"" + "}"
                 , header, _match, _order_by, _page, _per_page);
@@ -253,7 +294,7 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
         }
 
 
-        public async Task<ApiResponse> GetItemResponseByBarcodeAsync(string barcode, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
+        public async Task<ApiResponse> GetItemsResponseByBarcodeAsync(string barcode, string _match = null, string _order_by = null, string _page = null, string _per_page = null)
         {
             var response = await GetItemBy($"{this.BaseUrl}" + "/api/v1/items?q={\"external_id\":" + $"\"{barcode}\"" + "}",
                 KohaHeaders.ItemsXkohaEmbedHeaders.None, _match, _order_by, _page, _per_page);
@@ -267,35 +308,66 @@ namespace AllcandoJM.KohaFramework.ApiClientItems
             return await HandleResponse(response);
         }
 
-
-
-
-        private HttpRequestMessage BuildGetRequest(string endpoint, KeyValuePair<string, string>[] queryParams = null, KeyValuePair<string, string>[] Headers=null)
+        public async Task<string> GetCheckoutsStringByQasync(string q)
         {
-            string paramsString = "";
-            if(queryParams != null)
-            {
-                paramsString = "?";
-                foreach(var param in queryParams)
-                {
-                    paramsString += $"{param.Key}={param.Value}&";
-                }
-                paramsString = paramsString.TrimEnd('&');
-            }
-               
-            HttpRequestMessage msq = new HttpRequestMessage(HttpMethod.Get, $"{this.BaseUrl}{endpoint}{paramsString}");
-
-            if (Headers != null)
-            {
-                foreach (var header in Headers)
-                {
-                    msq.Headers.Add(header.Key, header.Value);
-                }
-            }
-
-            return msq;
-
+            var response = await GetCheckoutsby(q, CheckoutXkohaEmbedHeaders.none);
+            return await HandleString(response);
+        }
+        
+        public async Task<string> GetCheckoutsStringByQasync(string q,CheckoutXkohaEmbedHeaders headers)
+        {
+            var response = await GetCheckoutsby(q, headers);
+            return await HandleString(response);
         }
 
+        public async Task<ApiResponse> GetCheckoutsResponseByQasync(string q)
+        {
+            var response = await GetCheckoutsby(q, CheckoutXkohaEmbedHeaders.none);
+            return await HandleResponse(response);
+        }
+
+        public async Task<ApiResponse> GetCheckoutsResponseByQasync(string q, CheckoutXkohaEmbedHeaders headers)
+        {
+            var response = await GetCheckoutsby(q, headers);
+            return await HandleResponse(response);
+        }
+
+
+
+        private async Task<HttpResponseMessage> GetCheckoutsby(string q,CheckoutXkohaEmbedHeaders headers)
+        {
+            StringBuilder link = new StringBuilder($"{this.BaseUrl}/api/v1/checkouts?_per_page=-1&");
+            link.Append(q);
+
+            StringBuilder header = new StringBuilder();
+            var req = new HttpRequestMessage(HttpMethod.Get, link.ToString());
+            foreach (CheckoutXkohaEmbedHeaders flag in Enum.GetValues(typeof(CheckoutXkohaEmbedHeaders)))
+            {
+                if (flag == CheckoutXkohaEmbedHeaders.none)
+                {
+                    continue;
+                }
+
+                if (headers.HasFlag(flag))
+                {
+                    header.Append(CheckoutsHeaders[(int)flag]+",");
+                }
+            }
+            Console.WriteLine(header.ToString());
+            Console.WriteLine(link);
+
+
+            req.Headers.Add("x-koha-embed", header.ToString().TrimEnd(','));
+            return await client.SendAsync(req);
+            
+        }
+
+
+
+
+
+
+
+       
     }
 }

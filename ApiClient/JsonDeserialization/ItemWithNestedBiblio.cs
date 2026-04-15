@@ -46,7 +46,7 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         public int DamagedStatus { get; set; }
 
         [JsonPropertyName("effective_bookable")]
-        public bool EffectiveBookable { get; set; }
+        public object? EffectiveBookable { get; set; }
 
         [JsonPropertyName("effective_item_type_id")]
         public string? EffectiveItemTypeId { get; set; }
@@ -67,7 +67,7 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         public string? InventoryNumber { get; set; }
 
         [JsonPropertyName("item_id")]
-        public int ItemId { get; set; }
+        public int? ItemId { get; set; }
 
         [JsonPropertyName("item_type_id")]
         public string? ItemTypeId { get; set; }

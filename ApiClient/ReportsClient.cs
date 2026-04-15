@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace AllcandoJM.KohaFramework
 {
-    public  class ReportsClient : ApiClient
+    public  class ReportsClient : ApiCore.ApiClient
     {
         HttpClient client;
         ApiConfig config;
 
         string BaseUrl;
-
+        string user, pass;
 
         public ReportsClient()
         {
@@ -29,12 +29,24 @@ namespace AllcandoJM.KohaFramework
 
             string cookie = CookieGrabber(BaseUrl,u,p).GetAwaiter().GetResult(); 
            
+        }
 
+        public ReportsClient(string staffURL,string user,string pass)
+        {
+            client = new HttpClient();
+            BaseUrl = staffURL;
+            this.user = user;
+            this.pass=pass;
+            
+        }
 
+        public async Task<string> Login()
+        {
+            return await CookieGrabber(BaseUrl, user, pass);
         }
 
 
-        public async Task<string> CookieGrabber(string StaffIface,string user,string password)
+        private async Task<string> CookieGrabber(string StaffIface,string user,string password)
         {
             var loginPageRequest = new HttpRequestMessage(HttpMethod.Get, StaffIface);
             var loginpageResponse = await client.SendAsync(loginPageRequest);
@@ -111,6 +123,25 @@ namespace AllcandoJM.KohaFramework
             var response = await client.GetAsync(req);
             var csv = await response.Content.ReadAsStringAsync();
             return csv;
+        }
+
+        public async Task<HttpResponseMessage> QueryCatalogueAsync(string searchstring)
+        {
+            string req = $"{BaseUrl}/cgi-bin/koha/catalogue/search.pl?q={searchstring}";
+            var response = await client.GetAsync(req);
+
+            return response;
+
+
+        }
+
+        public async Task<HttpResponseMessage> QueryPersoNameAsync(string name,string surname)
+        {
+            string req = $"{BaseUrl}/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=all&and_or=and&excluding=&value={name}+{surname}&authtypecode=PERSO_NAME&operator=contains&orderby=HeadingAsc";
+            var response = await client.GetAsync(req);
+
+            return response;
+
         }
 
     }

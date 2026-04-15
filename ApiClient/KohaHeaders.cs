@@ -39,6 +39,51 @@ namespace AllcandoJM.KohaFramework.ApiCore
         };
 
 
+        [Flags]
+        public enum PatronXkohaEmbedHeaders
+        {
+            extended_attributes = 1,
+            checkoutspluscount = 2,
+            overduespluscount = 4,
+            account_balance = 8,
+            library = 16
+        }
+
+        public static IDictionary<int, string> PatronHeaders = new Dictionary<int, string>()
+        {
+
+        };
+
+
+        [Flags]
+        public enum CheckoutXkohaEmbedHeaders
+        {
+            booking =1,
+            issuer = 2,
+            item =4,
+            itembiblio =8,
+            library = 16,
+            renewals = 32,
+            patron = 64,
+            none = 128
+        }
+
+        public static IDictionary<int, string> CheckoutsHeaders = new Dictionary<int, string>()
+        {
+            {(int)CheckoutXkohaEmbedHeaders.booking,"booking" },
+            {(int)CheckoutXkohaEmbedHeaders.issuer,"issuer" },
+            {(int)CheckoutXkohaEmbedHeaders.item,"item" },
+            {(int)CheckoutXkohaEmbedHeaders.itembiblio,"item.biblio" },
+            {(int)CheckoutXkohaEmbedHeaders.library,"library" },
+            {(int)CheckoutXkohaEmbedHeaders.renewals,"renewals" },
+            {(int)CheckoutXkohaEmbedHeaders.patron,"patron" }
+
+        };
+
+
+
+     
+
 
 
     }

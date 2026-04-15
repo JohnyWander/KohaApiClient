@@ -18,13 +18,13 @@ namespace AllcandoJM.KohaFramework.JsonDeserialization
         public decimal AmountOutstanding { get; set; }
 
         [JsonPropertyName("cash_register_id")]
-        public int CashRegisterId { get; set; }
+        public int? CashRegisterId { get; set; }
 
         [JsonPropertyName("checkout_id")]
-        public int CheckoutId { get; set; }
+        public int? CheckoutId { get; set; }
 
         [JsonPropertyName("old_checkout_id")]
-        public int OldCheckoutId { get; set; }
+        public int? OldCheckoutId { get; set; }
 
         [JsonPropertyName("date")]
         public DateTime? Date { get; set; }
